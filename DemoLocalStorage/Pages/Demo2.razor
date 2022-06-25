@@ -1,0 +1,43 @@
+﻿@page "/demo2"
+@inject ILocalStorageService localStorage
+<h2>Demo2</h2>
+
+    <button @onclick="printStudentHandler">Print Students</button><br />
+    <button @onclick="populateStudentsHandler">Populate Students</button><br />
+    <button @onclick="clearStudentsHandler">Clear Students</button><br />
+    <br />These two buttons save and write the list of students to disk<br />
+    <button @onclick="saveStudentHandler">Save Students</button><br />
+    <button @onclick="loadStudentHandler">Load Students</button><br />
+
+
+@code {
+
+
+    public void printStudentHandler()
+    {
+        Student.printAllStudents();
+    }
+    public void populateStudentsHandler()
+    {
+        Student.students.Add(new Student("Harry", 2236, new DateOnly(2000,11,27)));
+        Student.students.Add(new Student("Kim", 2237, new DateOnly(1999,01,12)));
+        Student.students.Add(new Student("Jo", 2238, new DateOnly(2001,12,1)));
+    }
+    public void clearStudentsHandler()
+    {
+        Student.students.Clear();
+    }
+
+    public async Task saveStudentHandler()
+    {
+        string theStudentsSerialized = Student.serializeStudentsList();                     // convert the Student.students list to a serialized string
+
+        await localStorage.SetItemAsync("myStudents", theStudentsSerialized);
+    }
+
+    public async Task loadStudentHandler()
+    {
+        counter = await localStorage.GetItemAsync<int>("myCounter");
+    }
+
+}

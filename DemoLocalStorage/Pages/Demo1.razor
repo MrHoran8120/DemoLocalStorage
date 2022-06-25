@@ -1,0 +1,64 @@
+﻿@page "/demo1"
+@inject ILocalStorageService localStorage
+
+
+<h3>Demo1</h3>
+
+The counter value is @counter.
+
+<br /><br />
+<button @onclick=saveButtonHandler>Save Counter</button>
+<br />
+<button @onclick="loadButtonHandler">Load Counter</button>
+<br />
+<button @onclick="incButtonHandler">Increment Counter</button>
+<br />
+
+
+<br /><br /><br />
+
+<h2>How to Steps:</h2>
+
+<ol>
+    <li>find nuget and add the package Blazored.LocalStorage</li>
+    <li>Use Solution explorer, go to shared and edit _Imports.razor</li>
+    <li>-->add the line - <i>using Blazored.LocalStorage</i></li>
+    <li>Solution Explorer - Edit Program.cs</li>
+    <li>-->add line  <i>using Blazored.LocalStorage;</i></li>
+    <li>-->add lines <i>builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddBlazoredLocalStorage(config =>
+    config.JsonSerializerOptions.WriteIndented = true
+);
+    </i>Edit your razor page (in this example Demo1.razor) </li>
+    <li>-->Add the line to the top of your razor page</li>
+<i>@@inject ILocalStorageService localStorage</i>
+
+    <li>Finally, make your changes to add "set" and "get" items in local storage - see Demo1.razor for more info </li>
+</ol>
+
+
+
+
+
+
+
+
+
+@code {
+    int counter = 0;
+
+    public void incButtonHandler()
+    {
+        counter++;
+    }
+
+    public async Task saveButtonHandler()
+    {
+        await localStorage.SetItemAsync("myCounter", counter);
+    }
+
+    public async Task loadButtonHandler()
+    {
+        counter = await localStorage.GetItemAsync<int>("myCounter");
+    }
+}
